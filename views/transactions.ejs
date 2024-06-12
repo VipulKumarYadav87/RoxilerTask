@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions List</title>
+    <link rel="stylesheet" href="/transactions.css">
+</head>
+<body>
+    <h1>Transactions</h1>
+
+    <!-- Search Bar -->
+    <form class="search-bar" method="GET" action="/transactions">
+        <input type="text" name="search" placeholder="Search transaction" value="<%= search || '' %>" />
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Select Month -->
+    <form class="select-month" method="GET" action="/transactions">
+        <select name="month" onchange="this.form.submit()">
+            <option value="">Select Month</option>
+            <option value="1" <%= month === '1' ? 'selected' : '' %>>January</option>
+            <option value="2" <%= month === '2' ? 'selected' : '' %>>February</option>
+            <option value="3" <%= month === '3' ? 'selected' : '' %>>March</option>
+            <option value="4" <%= month === '4' ? 'selected' : '' %>>April</option>
+            <option value="5" <%= month === '5' ? 'selected' : '' %>>May</option>
+            <option value="6" <%= month === '6' ? 'selected' : '' %>>June</option>
+            <option value="7" <%= month === '7' ? 'selected' : '' %>>July</option>
+            <option value="8" <%= month === '8' ? 'selected' : '' %>>August</option>
+            <option value="9" <%= month === '9' ? 'selected' : '' %>>September</option>
+            <option value="10" <%= month === '10' ? 'selected' : '' %>>October</option>
+            <option value="11" <%= month === '11' ? 'selected' : '' %>>November</option>
+            <option value="12" <%= month === '12' ? 'selected' : '' %>>December</option>
+        </select>
+        <input type="hidden" name="search" value="<%= search %>" />
+    </form>
+
+    <!-- Transactions Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Date of Sale</th>
+                <th>Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% transactions.forEach(transaction => { %>
+                <tr>
+                    <td><%= transaction.title %></td>
+                    <td><%= transaction.description %></td>
+                    <td><%= transaction.price %></td>
+                    <td><%= transaction.dateOfSale.toDateString() %></td>
+                    <td><%= transaction.sold ? 'Yes' : 'No' %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <form method="GET" action="/transactions">
+            <button name="page" value="<%= currentPage - 1 %>" <%= currentPage === 1 ? 'disabled' : '' %>>Previous</button>
+            <span class="page-numbers">Page <%= currentPage %> of <%= totalPages %></span>
+            <button name="page" value="<%= currentPage + 1 %>" <%= currentPage === totalPages ? 'disabled' : '' %>>Next</button>
+            <input type="hidden" name="search" value="<%= search %>" />
+            <input type="hidden" name="month" value="<%= month %>" />
+        </form>
+    </div>
+</body>
+</html>

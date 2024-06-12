@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics</title>
+    <link rel="stylesheet" href="/statistics.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1 class="stat">Select Month for Statistics</h1>
+    <form action="/statistics" method="GET">
+        <label for="month">Select Month:</label>
+        <select name="month" id="month">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3" <%= month === 3 ? 'selected' : '' %>>March</option>
+            <option value="4" <%= month === 4 ? 'selected' : '' %>>April</option>
+            <option value="5" <%= month === 5 ? 'selected' : '' %>>May</option>
+            <option value="6" <%= month === 6 ? 'selected' : '' %>>June</option>
+            <option value="7" <%= month === 7 ? 'selected' : '' %>>July</option>
+            <option value="8" <%= month === 8 ? 'selected' : '' %>>August</option>
+            <option value="9" <%= month === 9 ? 'selected' : '' %>>September</option>
+            <option value="10" <%= month === 10 ? 'selected' : '' %>>October</option>
+            <option value="11" <%= month === 11 ? 'selected' : '' %>>November</option>
+            <option value="12" <%= month === 12 ? 'selected' : '' %>>December</option>
+        </select>
+        <button type="submit">Get Statistics</button>
+    </form>
+
+    <div>
+        <h1>Statistics for Month <%= month %></h1>
+        <% if (statistics) { %>
+            <p>Total Sale Amount: <%= statistics.totalSaleAmount %></p>
+            <p>Total Sold Items: <%= statistics.totalSoldItems %></p>
+            <p>Total Not Sold Items: <%= statistics.totalNotSoldItems %></p>
+
+            <!-- Canvas for the bar chart -->
+            <canvas id="statisticsChart" width="400" height="200"></canvas>
+            
+            <script>
+                var ctx = document.getElementById('statisticsChart').getContext('2d');
+                var statisticsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Total Sale Amount', 'Total Sold Items', 'Total Not Sold Items'],
+                        datasets: [{
+                            label: 'Statistics',
+                            data: [<%= statistics.totalSaleAmount %>, <%= statistics.totalSoldItems %>, <%= statistics.totalNotSoldItems %>],
+                           backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+                            borderColor: ['rgba(54, 162, 235, 1)', 'rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+        <% } else { %>
+            <p>No statistics available for the selected month.</p>
+        <% } %>
+    </div>
+</body>
+</html>
